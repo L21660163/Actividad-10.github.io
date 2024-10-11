@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filtrado de Tabla en Tiempo Real</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9; /* Color de fondo claro */
+        }
+        h2 {
+            color: #4a4a4a; /* Tono gris suave */
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            overflow: hidden; /* Para el efecto de borde redondeado */
+        }
+        table, th, td {
+            border: 1px solid #d1d1d1; /* Borde gris suave */
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #e0f7fa; /* Color de encabezado pastel */
+        }
+        td {
+            background-color: #fff3e0; /* Color de celda pastel */
+        }
+        #searchInput {
+            margin-bottom: 10px;
+            padding: 10px;
+            width: 100%;
+            border: 1px solid #d1d1d1;
+            border-radius: 5px;
+            font-size: 16px;
+            background-color: #f1f8e9; /* Color de fondo del input */
+        }
+        #noResults {
+            display: none; /* Ocultar inicialmente */
+            margin-top: 20px;
+            padding: 10px;
+            color: #d9534f; /* Color del texto del mensaje */
+            border: 1px solid #d9534f; /* Borde del mensaje */
+            background-color: #fce4ec; /* Color de fondo del mensaje */
+            border-radius: 5px;
+            text-align: center;
+            font-size: 16px;
+            width: 100%;
+        }
+        #noResults i {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Filtrar Tabla en Tiempo Real</h2>
+
+<!-- Input para la búsqueda -->
+<input type="text" id="searchInput" placeholder="Buscar en la tabla...">
+
+<!-- Mensaje de no resultados -->
+<div id="noResults"><i class="fas fa-exclamation-circle"></i>No hay resultados que coincidan con tu búsqueda.</div>
+
+<!-- Tabla con datos -->
+<table id="dataTable">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Edad</th>
+            <th>Ciudad</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Juan Pérez</td>
+            <td>30</td>
+            <td>Madrid</td>
+        </tr>
+        <tr>
+            <td>María Gómez</td>
+            <td>25</td>
+            <td>Barcelona</td>
+        </tr>
+        <tr>
+            <td>Carlos Ruiz</td>
+            <td>35</td>
+            <td>Valencia</td>
+        </tr>
+        <tr>
+            <td>Laura López</td>
+            <td>28</td>
+            <td>Sevilla</td>
+        </tr>
+    </tbody>
+</table>
+
+<script>
+    // Función para filtrar la tabla en tiempo real
+    document.getElementById('searchInput').addEventListener('keyup', function() {
+        var input, filter, table, tr, td, i, j, txtValue;
+        input = document.getElementById('searchInput');
+        filter = input.value.toUpperCase();
+        table = document.getElementById('dataTable');
+        tr = table.getElementsByTagName('tr');
+        var noResults = document.getElementById('noResults');
+        var hasResults = false; // Variable para verificar si hay resultados
+
+        // Iterar sobre todas las filas de la tabla (excepto la cabecera)
+        for (i = 1; i < tr.length; i++) {
+            tr[i].style.display = 'none';  // Ocultar todas las filas inicialmente
+            td = tr[i].getElementsByTagName('td');
+            
+            // Iterar sobre cada celda de la fila
+            for (j = 0; j < td.length; j++) {
+                if (td[j]) {
+                    txtValue = td[j].textContent || td[j].innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = '';  // Mostrar la fila si coincide
+                        hasResults = true; // Encontró al menos un resultado
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Mostrar u ocultar el mensaje de no resultados
+        noResults.style.display = hasResults ? 'none' : 'block'; 
+    });
+</script>
+
+</body>
+</html>
